@@ -5,8 +5,7 @@ import * as github from '@actions/github';
 const { context = {} } = github;
 const { pull_request, head_commit } = context.payload;
 
-const regexPullRequest = /Merge pull request \#\d+ from/g;
-const trelloCardIdPattern = core.getInput('trello-card-id-pattern', { required: false }) || '#';
+const trelloCardIdPattern = core.getInput('trello-card-id-pattern', { required: false }) || /trello.com\/c\/(.+)\)/g;
 const trelloApiKey = core.getInput('trello-api-key', { required: true });
 const trelloAuthToken = core.getInput('trello-auth-token', { required: true });
 const trelloBoardId = core.getInput('trello-board-id', { required: true });
@@ -18,8 +17,8 @@ const trelloListNamePullRequestClosed = core.getInput('trello-list-name-pr-close
 function getCardNumbers(message) {
   console.log(`getCardNumber(${message})`);
   console.log(`Trello ID match pattern ${trelloCardIdPattern}`)
-  let ids = message && message.length > 0 ? message.replace(regexPullRequest, "").match(new RegExp(`${trelloCardIdPattern}\\d+`, 'g')) : [];
-  return ids && ids.length > 0 ? ids.map(x => x.replace(trelloCardIdPattern, '')) : null;
+  let matches = message && message.length > 0 ? Array.from(message.matchAll(trelloCardIdPattern), match => match[1]) : [];
+  return matches && matches.length > 0 ? matches : null;
 }
 
 function getAllCardNumbers(message, branch) {
@@ -31,10 +30,10 @@ function getAllCardNumbers(message, branch) {
   return new Set([...cardBranch, ...cardMessage]);
 }
 
-async function getCardOnBoard(board, card) {
-  console.log(`getCardOnBoard(${board}, ${card})`);
+async function getCard(card) {
+  console.log(`getCard(${card})`);
   if (card && card.length > 0) {
-    let url = `https://trello.com/1/boards/${board}/cards/${card}`;
+    let url = `https://trello.com/1/cards/${card}?fields=shortLink`;
     console.log("Url is ", url);
     return await axios.get(url, { 
       params: { 
@@ -125,7 +124,7 @@ async function handleHeadCommit(data) {
   let user = data.author.name;
   let cardsNumbers = getCardNumbers(message);
   cardsNumbers.forEach(async cardNumber => {
-    let card = await getCardOnBoard(trelloBoardId, cardNumber);
+    let card = await getCard(cardNumber);
     if (card && card.length > 0) {
       if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
         await addAttachmentToCard(card, url);
@@ -148,11 +147,11 @@ async function handlePullRequest(data) {
   let url = data.html_url || data.url;
   let message = data.title;
   let user = data.user.name;
-  let branch = data.head.ref;
+  let branch = data.title;
   let cardsNumbers = getAllCardNumbers(message, branch);
   cardsNumbers.forEach(async cardNumber => {
+    let card = await getCard(cardNumber);
 
-  let card = await getCardOnBoard(trelloBoardId, cardNumber);
     if (card && card.length > 0) {
       if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
         await addAttachmentToCard(card, url);
