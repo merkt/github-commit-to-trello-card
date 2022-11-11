@@ -9080,8 +9080,8 @@ const trelloListNamePullRequestOpen = _actions_core__WEBPACK_IMPORTED_MODULE_1__
 const trelloListNamePullRequestClosed = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-list-name-pr-closed', { required: false });
 
 function getCardNumbers(message) {
-  console.log(`getCardNumber(${message})`);
-  console.log(`Trello ID match pattern ${trelloCardIdPattern}`)
+  console.log(`getCardNumber('${message}')`);
+  console.log(`Trello ID match pattern "${trelloCardIdPattern}"`)
   let matches = message && message.length > 0 ? Array.from(message.matchAll(trelloCardIdPattern), match => match[1]) : [];
   return matches && matches.length > 0 ? matches : null;
 }
@@ -9187,8 +9187,8 @@ async function handleHeadCommit(data) {
   let url = data.url;
   let message = data.message;
   let user = data.author.name;
-  let cardsNumbers = getCardNumbers(message);
-  cardsNumbers.forEach(async cardNumber => {
+  let cardNumbers = getCardNumbers(message);
+  cardNumbers.forEach(async cardNumber => {
     let card = await getCard(cardNumber);
     if (card && card.length > 0) {
       if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
