@@ -9188,6 +9188,11 @@ async function handleHeadCommit(data) {
   let message = data.message;
   let user = data.author.name;
   let cardNumbers = getCardNumbers(message);
+
+  if (!cardNumbers) {
+    return;
+  }
+
   cardNumbers.forEach(async cardNumber => {
     let card = await getCard(cardNumber);
     if (card && card.length > 0) {
