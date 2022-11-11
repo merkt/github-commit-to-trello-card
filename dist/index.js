@@ -9075,7 +9075,7 @@ const trelloApiKey = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello
 const trelloAuthToken = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-auth-token', { required: true });
 const trelloBoardId = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-board-id', { required: true });
 const trelloCardAction = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-card-action', { required: true });
-const trelloListNameCommit = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-list-name-commit', { required: true });
+const trelloListNameCommit = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-list-name-commit', { required: false });
 const trelloListNamePullRequestOpen = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-list-name-pr-open', { required: false });
 const trelloListNamePullRequestClosed = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-list-name-pr-closed', { required: false });
 
