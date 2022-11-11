@@ -167,10 +167,10 @@ async function getCard(card) {
   return null;
 }
 
-async function F(board, list) {
+async function getListOnBoard(board, list) {
   console.log(`getListOnBoard(${board}, ${list})`);
   let url = `https://trello.com/1/boards/${board}/lists`
-  return await axios.get(url, { 
+  return await axios__WEBPACK_IMPORTED_MODULE_0__.get(url, { 
     params: { 
       key: trelloApiKey, 
       token: trelloAuthToken 
@@ -267,7 +267,7 @@ async function handlePullRequest(data) {
   let cardsNumbers = getAllCardNumbers(message, branch);
   cardsNumbers.forEach(async cardNumber => {
     let card = await getCard(cardNumber);
-    
+
     if (card && card.length > 0) {
       if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
         await addAttachmentToCard(card, url);
