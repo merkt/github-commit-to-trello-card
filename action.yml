@@ -19,7 +19,7 @@ inputs:
     required: true
   trello-list-name-commit:
     description: Trello list name for new commit, for example "Doing", "In Progress", etc
-    required: true
+    required: false
   trello-list-name-pr-open:
     description: Trello list name for open pull request, for example "Reviewing", "In Review", etc
     required: false
@@ -28,7 +28,6 @@ inputs:
     required: false
   trello-card-id-pattern:
     description: Custom pattern to extract Trello card ID
-    default: "#"
     required: false
 runs:
   using: 'node16'
