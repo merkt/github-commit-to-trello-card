@@ -9197,7 +9197,7 @@ async function handleHeadCommit(data) {
       else if (trelloCardAction && trelloCardAction.toLowerCase() == 'comment') {
         await addCommentToCard(card, user, message, url);
       }
-      if (message.match(regexPullRequest) && trelloListNamePullRequestClosed && trelloListNamePullRequestClosed.length > 0) {
+      if (trelloListNamePullRequestClosed && trelloListNamePullRequestClosed.length > 0) {
         await moveCardToList(trelloBoardId, card, trelloListNamePullRequestClosed);
       }
       else if (trelloListNameCommit && trelloListNameCommit.length > 0) {
