@@ -5,7 +5,7 @@ import * as github from '@actions/github';
 const { context = {} } = github;
 const { pull_request, head_commit } = context.payload;
 
-const trelloCardIdPattern = core.getInput('trello-card-id-pattern', { required: false }) || /trello.com\/c\/(.+)\)/g;
+const trelloCardIdPattern = core.getInput('trello-card-id-pattern', { required: false }) || /trello.com\/c\/([\w\d]+)/g;
 const trelloApiKey = core.getInput('trello-api-key', { required: true });
 const trelloAuthToken = core.getInput('trello-auth-token', { required: true });
 const trelloBoardId = core.getInput('trello-board-id', { required: true });
@@ -18,7 +18,7 @@ function getCardNumbers(message) {
   console.log(`getCardNumber('${message}')`);
   console.log(`Trello ID match pattern "${trelloCardIdPattern}"`)
   let matches = message && message.length > 0 ? Array.from(message.matchAll(trelloCardIdPattern), match => match[1]) : [];
-  return matches && matches.length > 0 ? matches : null;
+  return matches && matches.length > 0 ? [...new Set(matches)] : null;
 }
 
 function getAllCardNumbers(message, branch) {
