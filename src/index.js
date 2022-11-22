@@ -25,7 +25,8 @@ function getAllCardNumbers(message, branch) {
   const cardBranch = getCardNumbers(message);
   const cardMessage = getCardNumbers(branch);
   if (cardBranch == null || cardMessage == null) {
-    throw new Error("PR title or branch name does not meet the guidelines");
+    console.log("PR title or branch name does not meet the guidelines");
+    return new Set();
   }
   return new Set([...cardBranch, ...cardMessage]);
 }
